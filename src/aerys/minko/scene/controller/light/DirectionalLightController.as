@@ -102,14 +102,16 @@ package aerys.minko.scene.controller.light
 		
 		private function updateProjectionMatrix() : void
 		{
+			var zNear 	: Number 	= lightData.getLightProperty('shadowZNear');
 			var zFar 	: Number 	= lightData.getLightProperty('shadowZFar');
+			var zRange	: Number	= zFar - zNear;
 			var width	: Number	= lightData.getLightProperty('shadowWidth');
 			
 			_projection.initialize(
-				2. / width, 	0., 			0.,			0.,
-				0., 			2. / width, 	0.,			0.,
-				0., 			0., 			2. / zFar, 	0.,
-				0., 			0., 			0.,			1.
+				2. / width, 	0., 			0.,				0.,
+				0., 			2. / width, 	0.,				0.,
+				0., 			0., 			2. / zRange, 	0.,
+				0., 			0., 			-zNear/zRange,	1.
 			);
 			
 			_worldToScreen.lock()

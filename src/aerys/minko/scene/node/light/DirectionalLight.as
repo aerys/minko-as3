@@ -61,6 +61,15 @@ package aerys.minko.scene.node.light
 			lightData.setLightProperty('shadowWidth', v);
 		}
 		
+		public function get shadowZNear() : Number
+		{
+			return lightData.getLightProperty('shadowZNear');
+		}
+		public function set shadowZNear(v : Number) : void
+		{
+			lightData.setLightProperty('shadowZNear', v);
+		}
+		
 		public function get shadowZFar() : Number
 		{
 			return lightData.getLightProperty('shadowZFar');

@@ -2,8 +2,6 @@ package aerys.minko.render.shader.part.environment
 {
 	import flash.geom.Rectangle;
 	
-	import mx.messaging.SubscriptionInfo;
-	
 	import aerys.minko.render.material.environment.EnvironmentMappingProperties;
 	import aerys.minko.render.shader.SFloat;
 	import aerys.minko.render.shader.Shader;
