@@ -156,6 +156,7 @@ package aerys.minko.scene.node.light
 			this.shadowSpread		= shadowSpread;
             this.shadowBias     	= shadowBias;
 			this.shadowColor		= shadowColor;
+			this.shadowZNear 		= 0;
 			
 			transform.lookAt(Vector4.ZERO, new Vector4(1, 1, 1));
 		}
