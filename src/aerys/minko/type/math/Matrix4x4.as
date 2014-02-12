@@ -1,14 +1,14 @@
 package aerys.minko.type.math
 {
-	import flash.geom.Matrix3D;
-	import flash.geom.Orientation3D;
-	import flash.geom.Utils3D;
-	import flash.geom.Vector3D;
-	
 	import aerys.minko.ns.minko_math;
 	import aerys.minko.type.Factory;
 	import aerys.minko.type.Signal;
 	import aerys.minko.type.binding.IWatchable;
+	
+	import flash.geom.Matrix3D;
+	import flash.geom.Orientation3D;
+	import flash.geom.Utils3D;
+	import flash.geom.Vector3D;
 
 	use namespace minko_math;
 		
@@ -885,11 +885,15 @@ package aerys.minko.type.math
                                      position	: Vector4	= null,
                                      up		    : Vector4	= null) : Matrix4x4
 		{
+			var lock : Boolean = _locked;
+			
+			_locked = true;
 			view(
 				position,
 				target,
 				up || deltaTransformVector(Vector4.Y_AXIS)
 			);
+			_locked = lock;
 			
 			return invert();
 		}
