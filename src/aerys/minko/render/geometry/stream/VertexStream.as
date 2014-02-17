@@ -615,7 +615,8 @@ package aerys.minko.render.geometry.stream
 				_localDispose = true;
 			else
 			{
-				_data.clear();
+				if (_data)
+					_data.clear();
 				_data = null;
 				_usage = StreamUsage.STATIC;
 			}
