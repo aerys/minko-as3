@@ -143,8 +143,7 @@ package aerys.minko.scene.controller.animation
 				
 				var numTimelines 	: int 			= _timelines.length;
 				var group			: Group			= ctrlTarget as Group;
-				
-				
+								
 				for (var i : int = 0; i < numTimelines; ++i)
 					if (!_isTimelineUpdateLocked[i])
 					{

@@ -6,7 +6,6 @@ package aerys.minko.scene.controller.animation
 	import aerys.minko.scene.controller.AbstractController;
 	import aerys.minko.scene.controller.EnterFrameController;
 	import aerys.minko.scene.node.ISceneNode;
-	import aerys.minko.scene.node.Scene;
 	import aerys.minko.type.Signal;
 	
 	use namespace minko_animation;
@@ -636,6 +635,12 @@ package aerys.minko.scene.controller.animation
 		{
 			_updateOneTime = true;
 			sceneEnterFrameHandler(null, null, null, getTimer());
+			return this;
+		}
+		
+		public function updateNextFrame() : IAnimationController
+		{
+			_updateOneTime = true;
 			return this;
 		}
 	}

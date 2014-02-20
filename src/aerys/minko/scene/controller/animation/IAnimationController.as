@@ -24,5 +24,6 @@ package aerys.minko.scene.controller.animation
 		function setTimeForLabel(name : String, newTime : Number) : IAnimationController;
 		function changeLabel(oldName : String, newName : String) : IAnimationController;
 		function updateNow() : IAnimationController;
+		function updateNextFrame() : IAnimationController;
     }
 }
