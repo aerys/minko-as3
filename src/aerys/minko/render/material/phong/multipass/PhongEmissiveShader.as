@@ -37,7 +37,7 @@ package aerys.minko.render.material.phong.multipass
 			var materialDiffuse	: SFloat	= super.getPixelColor();
             var shading 		: SFloat 	= materialDiffuse;
             
-            if (_diffuseAccumulator || _specularAccumulator)
+			if (_diffuseAccumulator || _specularAccumulator)
             {
                 var uv : SFloat = interpolate(_screenPos);
                 
@@ -58,7 +58,8 @@ package aerys.minko.render.material.phong.multipass
 //                diffuse = float4(multiply(diffuse.rgb, lighting.rgb), diffuse.a);
             }
             
-            return shading;
+			
+			return shading;
         }
     }
 }

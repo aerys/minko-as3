@@ -17,7 +17,7 @@ package aerys.minko.render.shader.part.phong
 		
 		public function getDiffuseColor() : SFloat
 		{
-			var diffuseColor : SFloat	= null;
+			var diffuseColor : SFloat	= float4(0., 0., 0., 1.);
 			var uv			 : SFloat	= fsUV;
 			
 			if (meshBindings.propertyExists(BasicProperties.DIFFUSE_MAP))
@@ -36,10 +36,6 @@ package aerys.minko.render.shader.part.phong
 			else if (meshBindings.propertyExists(BasicProperties.DIFFUSE_COLOR))
 			{
 				diffuseColor = meshBindings.getParameter(BasicProperties.DIFFUSE_COLOR, 4);
-			}
-			else
-			{
-				diffuseColor = float4(0., 0., 0., 1.);
 			}
 			
 			if (meshBindings.propertyExists(BasicProperties.ALPHA_MAP))

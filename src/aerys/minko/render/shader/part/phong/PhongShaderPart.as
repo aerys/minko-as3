@@ -109,13 +109,12 @@ package aerys.minko.render.shader.part.phong
 			super(main);
 		}
 		
-		public function getStaticLighting(materialDiffuse	: SFloat = null) : SFloat
+		public function getStaticLighting(materialDiffuse : SFloat = null) : SFloat
 		{
 			var contribution : SFloat;
 			
 			if (meshBindings.propertyExists(PhongProperties.LIGHT_MAP))
 			{
-				var uv			: SFloat = getVertexAttribute(VertexComponent.UV);
 				var lightMap	: SFloat = meshBindings.getTextureParameter(
 					PhongProperties.LIGHT_MAP,
 					1,
@@ -125,21 +124,21 @@ package aerys.minko.render.shader.part.phong
 					meshBindings.getProperty(PhongProperties.LIGHT_MAP_FORMAT, SamplerFormat.RGBA)
 				);
 				
-				contribution = sampleTexture(lightMap, interpolate(uv));
-				contribution = contribution.xyz;
+				return sampleTexture(lightMap, fsUV);
 				
-				if (meshBindings.propertyExists(PhongProperties.LIGHTMAP_MULTIPLIER))
+				/*if (meshBindings.propertyExists(PhongProperties.LIGHTMAP_MULTIPLIER))
 					contribution.scaleBy(meshBindings.getParameter(
 						PhongProperties.LIGHTMAP_MULTIPLIER,
 						1
-					));
+					));*/
+				//contribution = float3(0, 0, 0);
 			}
 			else
-				contribution = float3(0, 0, 0);
-			
+				return float4(0, 0, 0, 0);
+			/*
 			return materialDiffuse 
 				? multiply(contribution, materialDiffuse)
-				: contribution;
+				: contribution;**/
 		}
 		
 		public function getAmbientLighting(materialDiffuse	: SFloat = null) : SFloat
@@ -572,7 +571,7 @@ package aerys.minko.render.shader.part.phong
 										   materialDiffuse	: SFloat	= null,
 										   normal 			: SFloat	= null) : SFloat
 		{
-			var dynamicLighting     : SFloat	= float3(0, 0, 0);
+			var dynamicLighting     : SFloat	= float4(0, 0, 0, 0);
 			var singleLight         : Boolean   = lightId != -1;
 			var receptionMask	    : uint		= meshBindings.getProperty(
 				PhongProperties.RECEPTION_MASK,
@@ -606,7 +605,7 @@ package aerys.minko.render.shader.part.phong
 							contribution = getSpotLightContribution(lightId, diffuse, specular, materialDiffuse, normal);
 						
 						if (contribution)
-							dynamicLighting.incrementBy(multiply(color.rgb, contribution));
+							dynamicLighting.incrementBy(multiply(color, contribution));
 					}
 				}
 				

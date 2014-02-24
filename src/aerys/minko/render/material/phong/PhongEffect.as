@@ -21,6 +21,8 @@ package aerys.minko.render.material.phong
 	import aerys.minko.type.enum.ShadowMappingQuality;
 	import aerys.minko.type.enum.ShadowMappingType;
 	
+	import avmplus.getQualifiedClassName;
+	
     /**
      * <p>The PhongEffect using the Phong lighting model to render the geometry according to
      * the lighting setup of the scene. It supports an infinite number of lights/projected
@@ -147,12 +149,12 @@ package aerys.minko.render.material.phong
                 
                 if (getLightProperty(sceneBindings, lightId, 'diffuseEnabled'))
                     passes.push(
-                        new PhongAdditionalShader(lightId, true, false, _diffuseRenderTarget, _id + 7)
+                        new PhongAdditionalShader(lightId, true, false, _diffuseRenderTarget, _id + 7 + Number(lightId) / 1000)
                     );
                 
                 if (getLightProperty(sceneBindings, lightId, 'specularEnabled'))
                     passes.push(
-                        new PhongAdditionalShader(lightId, false, true, _specularRenderTarget, _id + 5)
+                        new PhongAdditionalShader(lightId, false, true, _specularRenderTarget, _id + 5 + Number(lightId) / 1000)
                     );
                 
 				if (lightPropertyExists(sceneBindings, lightId, 'shadowMappingType'))
@@ -161,7 +163,7 @@ package aerys.minko.render.material.phong
 						sceneBindings, lightId, 'shadowMappingType'
 					);
 					
-					switch (shadowMappingType)
+				switch (shadowMappingType)
 					{
 						case ShadowMappingType.PCF:
 							if (lightType == PointLight.LIGHT_TYPE)
@@ -204,7 +206,7 @@ package aerys.minko.render.material.phong
 				textureResource.width, textureResource.height, textureResource, 0, 0xffffffff
 			);
 			
-			passes.push(new PCFShadowMapShader(lightId, lightId + 1 + (fallback ? _id : 0), renderTarget));
+			passes.push(new PCFShadowMapShader(lightId, lightId + 1 + (fallback ? _id : 0) + Number(lightId) / 1000, renderTarget));
 		}
 		
 		private function pushDualParaboloidShadowMappingPass(sceneBindings	: DataBindingsProxy,

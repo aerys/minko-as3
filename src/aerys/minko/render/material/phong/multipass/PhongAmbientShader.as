@@ -43,12 +43,11 @@ package aerys.minko.render.material.phong.multipass
         override protected function getPixelColor() : SFloat
         {
 			var materialDiffuse	: SFloat	= _diffuse.getDiffuseColor();
-			var shading			: SFloat	= multiply(
-				add(_phong.getStaticLighting(null), _phong.getAmbientLighting(null)),
-				materialDiffuse
-			);
+			var shading			: SFloat	= add(
+				_phong.getStaticLighting(float4(1, 1, 1, 1)),
+				_phong.getAmbientLighting(float4(1, 1, 1, 1)));
 			
-            return float4(shading.rgb, 1);
+            return float4(multiply(materialDiffuse.rgb, shading.rgb), 1);
         }
     }
 }

@@ -48,7 +48,7 @@ package aerys.minko.render.material.phong.multipass
 				kill(subtract(0.5, lessThan(diffuseColor.w, alphaThreshold)));
 			}
 			
-            return float4(0, 0, 0, 0);
+            return float4(0, 0, 0, 1);
         }
     }
 }

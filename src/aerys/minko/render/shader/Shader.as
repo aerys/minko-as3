@@ -54,6 +54,11 @@ package aerys.minko.render.shader
 		
 		private var _optimization 			: uint = 0;
 		
+		public function priority() : Number
+		{
+			return _defaultSettings.priority;
+		}
+		
 		public function get optimization():uint
 		{
 			return _optimization;
@@ -298,24 +303,24 @@ package aerys.minko.render.shader
 			var pixelColor		: AbstractNode	= getPixelColor()._node;
 			var shaderGraph		: ShaderGraph	= new ShaderGraph(vertexPosition, pixelColor, _kills, optimization);
 			
-            try
-            {
+           try
+           {
 			    program	= shaderGraph.generateProgram(_name, signature);
                 _programs.push(program);
                 
                 _meshBindings	= null;
                 _sceneBindings	= null;
                 _kills.length	= 0;
-            }
-            catch (e : ShaderCompilerError)
-            {
+           }
+           catch (e : ShaderCompilerError)
+           {
                 _meshBindings	= null;
                 _sceneBindings	= null;
                 _kills.length	= 0;
                 
                 _compilationFailed.execute(e);
             }
-		    
+		   
 			return program;
 		}
 		
