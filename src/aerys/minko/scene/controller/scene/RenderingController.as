@@ -284,6 +284,7 @@ package aerys.minko.scene.controller.scene
 			var call			: DrawCall			= null;
 			var previousCall	: DrawCall			= null;
 			var passes			: Array				= _passes.concat();
+			var previousSettings: ShaderSettings	= null;
 			
 			for (passId = 0; passId < numPasses; ++passId)
 			{
@@ -295,17 +296,17 @@ package aerys.minko.scene.controller.scene
 				settings.setupRenderTarget(
 					context,
 					backBuffer,
-					previous ? previous.settings : null
+					previousSettings
 				);
 
-				if (!pass.settings.enabled || !pass.shader.enabled || !calls)
-                {
+				//trace("passId :", renderTarget.id);
 				
+				if (!settings.enabled || !pass.shader.enabled || !calls)
+                {
                     previous = pass;
 					continue;
                 }
 
-				
 				++_numEnabledPasses;
 				
 				var numCalls	: uint	= calls.length;
@@ -313,9 +314,10 @@ package aerys.minko.scene.controller.scene
 				pass.prepareContext(context, backBuffer, previous);
 				pass.begin.execute(pass, context, backBuffer);
 				previous = pass;
+				previousSettings = settings;
 				
 				// sort draw calls if necessary
-				if (pass.settings.depthSortDrawCalls && numCalls > 1)
+				if (settings.depthSortDrawCalls && numCalls > 1)
 				{
 					for (var drawCallId : uint = 0; drawCallId < numCalls; ++drawCallId)
 						sortValues[drawCallId] = -(calls[drawCallId] as DrawCall).depth;
@@ -396,7 +398,7 @@ package aerys.minko.scene.controller.scene
 			var viewportHeight	: Number 		= viewport.height;
 			var sceneProperties	: DataProvider 	= _scene.properties;
 			
-			sceneProperties.setProperty('time', time);
+			//sceneProperties.setProperty('time', time);
 			
 			if (viewportWidth != _lastViewportWidth)
 				sceneProperties.setProperty('viewportWidth', viewportWidth);
