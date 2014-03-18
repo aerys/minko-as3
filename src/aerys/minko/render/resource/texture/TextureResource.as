@@ -194,7 +194,7 @@ package aerys.minko.render.resource.texture
 				default:
 					throw new Error("Invalid ATF format");
 			}
-			
+
 			if (_texture
 				&& (oldFormat != _format
 					|| oldMipmap != _mipmap
