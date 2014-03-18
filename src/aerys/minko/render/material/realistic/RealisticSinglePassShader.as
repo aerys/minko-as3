@@ -53,11 +53,14 @@ package aerys.minko.render.material.realistic
 		
 		override protected function getPixelColor() : SFloat
 		{
-			var materialDiffuse : SFloat    = _diffuse.getDiffuseColor();			
-			var envColor        : SFloat    = _environmentMapping.getEnvironmentColor();
-			var envBlending     : uint      = meshBindings.getProperty(
+			var materialDiffuse : SFloat 	= _diffuse.getDiffuseColor();
+			var staticLighting 	: SFloat 	= _phong.getStaticLighting();
+			var dynamicLighting	: SFloat 	= _phong.getDynamicLighting(-1, true, true, true);			
+			var shading 		: SFloat 	= add(staticLighting, dynamicLighting);
+			var envBlending 	: uint 		= meshBindings.getProperty(
 				EnvironmentMappingProperties.ENVIRONMENT_BLENDING, Blending.ALPHA
 			);
+			var envColor        : SFloat    = _environmentMapping.getEnvironmentColor();
 			var finalDiffuse	: SFloat	= _blending.blend(envColor, materialDiffuse, envBlending);
 			
 			// BigPoint trick
@@ -77,14 +80,7 @@ package aerys.minko.render.material.realistic
 				finalDiffuse	= mix(materialDiffuse, finalDiffuse, envWeight);
 			}
 			
-			var shading	: SFloat	= add(
-				_phong.getStaticLighting(float4(1, 1, 1, 1)),
-				_phong.getDynamicLighting(-1, true, true, true, float4(1, 1, 1, 1))
-			);
-			
-			finalDiffuse.scaleBy(shading);
-			
-			return float4(finalDiffuse.rgb, materialDiffuse.a);
+			return multiply(shading, finalDiffuse);
 		}       
 	}
 }
