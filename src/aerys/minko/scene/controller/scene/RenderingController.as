@@ -398,7 +398,7 @@ package aerys.minko.scene.controller.scene
 			var viewportHeight	: Number 		= viewport.height;
 			var sceneProperties	: DataProvider 	= _scene.properties;
 			
-			//sceneProperties.setProperty('time', time);
+			sceneProperties.setProperty('time', time);
 			
 			if (viewportWidth != _lastViewportWidth)
 				sceneProperties.setProperty('viewportWidth', viewportWidth);
