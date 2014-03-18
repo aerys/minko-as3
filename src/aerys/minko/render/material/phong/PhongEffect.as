@@ -115,7 +115,7 @@ package aerys.minko.render.material.phong
         {
             var passes              : Vector.<Shader>   = new <Shader>[];
             var discardDirectional  : Boolean           = true;
-            var ambientEnabled      : Boolean           = meshBindings.propertyExists('lightmap');
+            var ambientEnabled      : Boolean           = meshBindings.propertyExists('lightMap');
 			
 			if (!_diffuseRenderTarget)
 			{
@@ -157,7 +157,7 @@ package aerys.minko.render.material.phong
                         new PhongAdditionalShader(lightId, false, true, _specularRenderTarget, _id + 5 + Number(lightId) / 1000)
                     );
                 
-				if (lightPropertyExists(sceneBindings, lightId, 'shadowMappingType'))
+				if (lightPropertyExists(sceneBindings, lightId, 'shadowMappingType') && meshBindings.getProperty("castShadows", false))
 				{
 					var shadowMappingType 	: uint	= getLightProperty(
 						sceneBindings, lightId, 'shadowMappingType'
