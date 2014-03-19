@@ -199,12 +199,7 @@ package aerys.minko.render.material.phong
                                                   passes 		: Vector.<Shader>,
 												  fallback 		: Boolean = false) : void
 		{
-			var textureResource : TextureResource	= getLightProperty(
-				sceneBindings, lightId, 'shadowMap'
-			);
-			var renderTarget	: RenderTarget		= new RenderTarget(
-				textureResource.width, textureResource.height, textureResource, 0, 0xffffffff
-			);
+			var renderTarget : RenderTarget = getLightProperty(sceneBindings, lightId, 'shadowMapRenderTarget') as RenderTarget;
 			
 			passes.push(new PCFShadowMapShader(lightId, lightId + 1 + (fallback ? _id : 0) + Number(lightId) / 1000, renderTarget));
 		}
