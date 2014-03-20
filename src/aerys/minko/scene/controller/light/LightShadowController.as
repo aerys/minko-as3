@@ -60,11 +60,12 @@ package aerys.minko.scene.controller.light
 		 */
 		protected function updateShadowMap() : void
 		{
-			var shadowMappingType	: uint				= lightData.getLightProperty('shadowMappingType');
-			var shadowMapSize		: uint				= lightData.getLightProperty('shadowMapSize');
-			var shadowMap			: ITextureResource	= lightData.getLightProperty('shadowMap')
+			var shadowMappingType		: uint				= lightData.getLightProperty('shadowMappingType');
+			var shadowMapSize			: uint				= lightData.getLightProperty('shadowMapSize');
+			var shadowMapRenderTarget	: RenderTarget 		= null;
+			var shadowMap				: ITextureResource	= lightData.getLightProperty('shadowMap')
 				as TextureResource;
-			var lightType			: uint				= lightData.getLightProperty('type');
+			var lightType				: uint				= lightData.getLightProperty('type');
 			
 			if (shadowMappingType != ShadowMappingType.NONE
 				&& !(_shadowMappingSupport & shadowMappingType))
@@ -73,6 +74,7 @@ package aerys.minko.scene.controller.light
 			if (shadowMap)
 			{
 				lightData.removeLightProperty('shadowMap');
+				lightData.removeLightProperty('shadowMapRenderTarget');
 				shadowMap.dispose();
 			}
 			
@@ -90,6 +92,9 @@ package aerys.minko.scene.controller.light
 						
 						shadowMap = new CubeTextureResource(shadowMapSize);
 						lightData.setLightProperty('shadowMap', shadowMap);
+						
+						shadowMapRenderTarget = new RenderTarget(shadowMap.width, shadowMap.height, shadowMap, 0, 0xffffffff);
+						lightData.setLightProperty('shadowMapRenderTarget', shadowMapRenderTarget);
 					}
 					else
 					{
@@ -99,6 +104,10 @@ package aerys.minko.scene.controller.light
 						
 						shadowMap = new TextureResource(shadowMapSize, shadowMapSize);
 						lightData.setLightProperty('shadowMap', shadowMap);
+						
+						shadowMapRenderTarget = new RenderTarget(shadowMap.width, shadowMap.height, shadowMap, 0, 0xffffffff);
+						lightData.setLightProperty('shadowMapRenderTarget', shadowMapRenderTarget);
+						
 					}
 					break;
 				case ShadowMappingType.VARIANCE:
@@ -158,6 +167,7 @@ package aerys.minko.scene.controller.light
 				var quality			: uint				= lightData.getLightProperty('shadowQuality');
 				var rawShadowMap	: ITextureResource	= lightData.getLightProperty('rawShadowMap')
 														as ITextureResource;
+				var shadowMapRenderTarget : RenderTarget = null;
 				if (rawShadowMap)
 				{
 					rawShadowMap.dispose();
@@ -171,6 +181,9 @@ package aerys.minko.scene.controller.light
 				}
 				shadowMap = new TextureResource(shadowMapSize, shadowMapSize);
 				lightData.setLightProperty('shadowMap', shadowMap);
+				
+				shadowMapRenderTarget new RenderTarget(shadowMap.width, shadowMap.height, shadowMap, 0, 0xffffffff);
+				lightData.setLightProperty('shadowMapRenderTarget', shadowMapRenderTarget);
 				
 				if (quality > ShadowMappingQuality.HARD)
 				{
@@ -189,6 +202,9 @@ package aerys.minko.scene.controller.light
 				
 				shadowMap = new CubeTextureResource(shadowMapSize);
 				lightData.setLightProperty('shadowMap', shadowMap);
+				
+				shadowMapRenderTarget = new RenderTarget(shadowMap.width, shadowMap.height, shadowMap, 0, 0xffffffff);
+				lightData.setLightProperty('shadowMapRenderTarget', shadowMapRenderTarget);
 			}
 			
 			return shadowMap;
