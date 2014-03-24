@@ -182,7 +182,7 @@ package aerys.minko.scene.controller.light
 				shadowMap = new TextureResource(shadowMapSize, shadowMapSize);
 				lightData.setLightProperty('shadowMap', shadowMap);
 				
-				shadowMapRenderTarget new RenderTarget(shadowMap.width, shadowMap.height, shadowMap, 0, 0xffffffff);
+				shadowMapRenderTarget = new RenderTarget(shadowMap.width, shadowMap.height, shadowMap, 0, 0xffffffff);
 				lightData.setLightProperty('shadowMapRenderTarget', shadowMapRenderTarget);
 				
 				if (quality > ShadowMappingQuality.HARD)
