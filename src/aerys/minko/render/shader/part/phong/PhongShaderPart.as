@@ -216,26 +216,34 @@ package aerys.minko.render.shader.part.phong
 					contribution = diffuseLighting;
 			}
 			
+			var computedShadows : SFloat = null;
+			
+			if (contribution && computeShadows)
+			{
+				if (shadowCasting == ShadowMappingType.PCF)
+					computedShadows = matrixShadowMapAttenuation.getAttenuation(lightId);
+				else if (shadowCasting == ShadowMappingType.DUAL_PARABOLOID)
+					computedShadows = dpShadowMapAttenuation.getAttenuation(lightId);
+				else if (shadowCasting == ShadowMappingType.VARIANCE)
+					computedShadows = varianceShadowMapAttenuation.getAttenuation(lightId);
+				else if (shadowCasting == ShadowMappingType.EXPONENTIAL)
+					computedShadows = exponentialShadowMapAttenuation.getAttenuation(lightId);
+			}
+			
 			if (specular)
 			{
 				var specularLighting    : SFloat    = getDirectionalLightSpecular(lightId, normal);
 				
 				if (specularLighting)
+				{
+					if (computedShadows)
+						specularLighting.scaleBy(lessEqual(1, computedShadows));
 					contribution = contribution ? add(contribution, specularLighting) : specularLighting;
+				}
 			}
-			
 			// attenuation
 			if (contribution && computeShadows)
-			{
-				if (shadowCasting == ShadowMappingType.PCF)
-					contribution.scaleBy(matrixShadowMapAttenuation.getAttenuation(lightId));
-				else if (shadowCasting == ShadowMappingType.DUAL_PARABOLOID)
-					contribution.scaleBy(dpShadowMapAttenuation.getAttenuation(lightId));
-				else if (shadowCasting == ShadowMappingType.VARIANCE)
-					contribution.scaleBy(varianceShadowMapAttenuation.getAttenuation(lightId));
-				else if (shadowCasting == ShadowMappingType.EXPONENTIAL)
-					contribution.scaleBy(exponentialShadowMapAttenuation.getAttenuation(lightId));
-			}
+				contribution.scaleBy(computedShadows);
 			
 			return contribution;
 		}
