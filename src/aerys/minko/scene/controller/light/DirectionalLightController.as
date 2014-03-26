@@ -110,7 +110,7 @@ package aerys.minko.scene.controller.light
 			_projection.initialize(
 				2. / width, 	0., 			0.,				0.,
 				0., 			2. / width, 	0.,				0.,
-				0., 			0., 			2. / zRange, 	0.,
+				0., 			0., 			1. / zRange, 	0.,
 				0., 			0., 			-zNear/zRange,	1.
 			);
 			
