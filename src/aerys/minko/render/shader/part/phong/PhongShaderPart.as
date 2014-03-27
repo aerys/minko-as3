@@ -22,6 +22,7 @@ package aerys.minko.render.shader.part.phong
 	import aerys.minko.scene.node.light.SpotLight;
 	import aerys.minko.type.enum.NormalMappingType;
 	import aerys.minko.type.enum.SamplerFormat;
+	import aerys.minko.type.enum.SamplerMipMapping;
 	import aerys.minko.type.enum.ShadowMappingType;
 	
 	/**
@@ -118,7 +119,7 @@ package aerys.minko.render.shader.part.phong
 				var lightMap	: SFloat = meshBindings.getTextureParameter(
 					PhongProperties.LIGHT_MAP,
 					1,
-					0,
+					meshBindings.getProperty(PhongProperties.LIGHT_MAP_MIPMAPPING, SamplerMipMapping.DISABLE),
 					1,
 					0,
 					meshBindings.getProperty(PhongProperties.LIGHT_MAP_FORMAT, SamplerFormat.RGBA)
