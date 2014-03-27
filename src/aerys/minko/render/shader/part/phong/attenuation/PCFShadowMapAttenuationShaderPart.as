@@ -119,7 +119,7 @@ package aerys.minko.render.shader.part.phong.attenuation
 				noShadows.scaleBy(1 / (2 * numSamples + 1));
 			}
 
-			//noShadows = coloredShadow(lightId, noShadows);
+			noShadows = coloredShadow(lightId, noShadows);
 			var uvX : SFloat = uv.x;
 			var uvY : SFloat = uv.y;
 			
