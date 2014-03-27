@@ -242,7 +242,7 @@ package aerys.minko.render.shader.part.phong
 				}
 			}
 			// attenuation
-			if (contribution && computeShadows)
+			if (contribution && computeShadows && computedShadows)
 				contribution.scaleBy(computedShadows);
 			
 			return contribution;
