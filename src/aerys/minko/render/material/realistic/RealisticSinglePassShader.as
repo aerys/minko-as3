@@ -80,7 +80,7 @@ package aerys.minko.render.material.realistic
 			}
 			var staticLighting 	: SFloat 	= _phong.getStaticLighting();
 			var specular 		: SFloat	= _phong.getDynamicLighting(-1, false, false, true);
-			var dynamicLighting	: SFloat 	= add(multiply(_phong.getDynamicLighting(-1, true, true, false), materialDiffuse), specular);			
+			var dynamicLighting	: SFloat 	= add(multiply(_phong.getDynamicLighting(-1, true, true, false), finalDiffuse), specular);			
 			var shading 		: SFloat 	= add(staticLighting, dynamicLighting);
 			
 			return float4(shading.rgb, alpha);
