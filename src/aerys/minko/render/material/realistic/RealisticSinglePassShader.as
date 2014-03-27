@@ -54,7 +54,7 @@ package aerys.minko.render.material.realistic
 		override protected function getPixelColor() : SFloat
 		{
 			var materialDiffuse : SFloat 	= _diffuse.getDiffuseColor();
-			
+			var alpha 			: SFloat 	= materialDiffuse.a;
 			
 			var envBlending 	: uint 		= meshBindings.getProperty(
 				EnvironmentMappingProperties.ENVIRONMENT_BLENDING, Blending.ALPHA
@@ -83,7 +83,7 @@ package aerys.minko.render.material.realistic
 			var dynamicLighting	: SFloat 	= add(multiply(_phong.getDynamicLighting(-1, true, true, false), materialDiffuse), specular);			
 			var shading 		: SFloat 	= add(staticLighting, dynamicLighting);
 			
-			return float4(shading.rgb, materialDiffuse.a);
+			return float4(shading.rgb, alpha);
 		}       
 	}
 }
