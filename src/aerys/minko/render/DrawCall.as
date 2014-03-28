@@ -341,8 +341,8 @@ package aerys.minko.render
 			_previousDrawCall = previous;
 			
 			var numTextures	: uint	= _fsTextures.length;
-			//var maxTextures	: uint	= previous ? previous._fsTextures.length : NUM_TEXTURES;
-			//var maxBuffers	: uint	= previous ? previous._numVertexComponents : NUM_VERTEX_BUFFERS;
+			var maxTextures	: uint	= previous ? previous._fsTextures.length : NUM_TEXTURES;
+			var maxBuffers	: uint	= previous ? previous._numVertexComponents : NUM_VERTEX_BUFFERS;
 			var i 			: uint 	= 0;
 
 			// setup textures
@@ -357,7 +357,7 @@ package aerys.minko.render
 			var lastNumTexture : uint = _lastNumTexture;
 			_lastNumTexture = i;
 			
-			while (i < lastNumTexture)
+			while (i < maxTextures)
 				context.setTextureAt(i++, null);
 
 			// setup buffers
@@ -374,7 +374,7 @@ package aerys.minko.render
 			var lastNumBuffer : uint = _lastNumBuffer;
 			_lastNumBuffer = i;
 			
-			while (i < lastNumBuffer)
+			while (i < maxBuffers)
 				context.setVertexBufferAt(i++, null);
 			
 			// draw triangles
