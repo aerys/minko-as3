@@ -126,20 +126,9 @@ package aerys.minko.render.shader.part.phong
 				);
 				
 				return sampleTexture(lightMap, fsUV);
-				
-				/*if (meshBindings.propertyExists(PhongProperties.LIGHTMAP_MULTIPLIER))
-					contribution.scaleBy(meshBindings.getParameter(
-						PhongProperties.LIGHTMAP_MULTIPLIER,
-						1
-					));*/
-				//contribution = float3(0, 0, 0);
 			}
 			else
 				return float4(0, 0, 0, 0);
-			/*
-			return materialDiffuse 
-				? multiply(contribution, materialDiffuse)
-				: contribution;**/
 		}
 		
 		public function getAmbientLighting(materialDiffuse	: SFloat = null) : SFloat
@@ -242,6 +231,7 @@ package aerys.minko.render.shader.part.phong
 					contribution = contribution ? add(contribution, specularLighting) : specularLighting;
 				}
 			}
+			
 			// attenuation
 			if (contribution && computeShadows && computedShadows)
 				contribution.scaleBy(computedShadows);
