@@ -291,52 +291,52 @@ package aerys.minko.render
 
 		public function apply(context : Context3DResource, previous : DrawCall) : uint
 		{
-			if (previous == null)
-			{
+//			if (previous == null)
+//			{
 				context.setProgramConstantsFromVector(PROGRAM_TYPE_VERTEX, 0, _vsConstants)
 					   .setProgramConstantsFromVector(PROGRAM_TYPE_FRAGMENT, 0, _fsConstants);
-			}
-			else
-			{
-				if (previous != _previousDrawCall)
-					_dirty = true;
-				
-				if (_dirty)
-				{
-					var previousVsConstant : Vector.<Number> = previous._vsConstants;
-					var previousFsconstant : Vector.<Number> = previous._fsConstants;
-					
-					var numVsConstant 	: uint = previousVsConstant.length;
-					var numFsConstant 	: uint = previousFsconstant.length;
-					var constantId		: uint = 0;
-					
-					_fsSameAsPrevious = numFsConstant == _fsConstants.length;
-					_vsSameAsPrevious = numVsConstant == _vsConstants.length;
-					
-					while(_fsSameAsPrevious && constantId < numFsConstant)
-					{
-						if (previousFsconstant[constantId] != _fsConstants[constantId])
-							_fsSameAsPrevious = false;
-						constantId++;
-					}
-
-					constantId = 0;
-					
-					while (_vsSameAsPrevious && constantId < numVsConstant)
-					{
-						if (previousVsConstant[constantId] != _vsConstants[constantId])
-							_vsSameAsPrevious = false;
-						constantId++;
-					}
-					
-					_dirty = false;
-				}
-				
-				if (!_fsSameAsPrevious)
-					context.setProgramConstantsFromVector(PROGRAM_TYPE_FRAGMENT, 0, _fsConstants);
-				if (!_vsSameAsPrevious)
-					context.setProgramConstantsFromVector(PROGRAM_TYPE_VERTEX, 0, _vsConstants);
-			}
+//			}
+//			else
+//			{
+//				if (previous != _previousDrawCall)
+//					_dirty = true;
+//				
+//				if (_dirty)
+//				{
+//					var previousVsConstant : Vector.<Number> = previous._vsConstants;
+//					var previousFsconstant : Vector.<Number> = previous._fsConstants;
+//					
+//					var numVsConstant 	: uint = previousVsConstant.length;
+//					var numFsConstant 	: uint = previousFsconstant.length;
+//					var constantId		: uint = 0;
+//					
+//					_fsSameAsPrevious = numFsConstant == _fsConstants.length;
+//					_vsSameAsPrevious = numVsConstant == _vsConstants.length;
+//					
+//					while(_fsSameAsPrevious && constantId < numFsConstant)
+//					{
+//						if (previousFsconstant[constantId] != _fsConstants[constantId])
+//							_fsSameAsPrevious = false;
+//						constantId++;
+//					}
+//
+//					constantId = 0;
+//					
+//					while (_vsSameAsPrevious && constantId < numVsConstant)
+//					{
+//						if (previousVsConstant[constantId] != _vsConstants[constantId])
+//							_vsSameAsPrevious = false;
+//						constantId++;
+//					}
+//					
+//					_dirty = false;
+//				}
+//				
+//				if (!_fsSameAsPrevious)
+//					context.setProgramConstantsFromVector(PROGRAM_TYPE_FRAGMENT, 0, _fsConstants);
+//				if (!_vsSameAsPrevious)
+//					context.setProgramConstantsFromVector(PROGRAM_TYPE_VERTEX, 0, _vsConstants);
+//			}
 			
 			_previousDrawCall = previous;
 			

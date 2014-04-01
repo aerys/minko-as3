@@ -47,7 +47,7 @@ package aerys.minko.render.material.phong.multipass
 				_phong.getStaticLighting(float4(1, 1, 1, 1)),
 				_phong.getAmbientLighting(float4(1, 1, 1, 1)));
 			
-            return float4(multiply(materialDiffuse.rgb, shading.rgb), 1);
+            return float4(multiply(materialDiffuse.rgb, shading.rgb), materialDiffuse.a);
         }
     }
 }

@@ -191,7 +191,7 @@ package aerys.minko.render.material.phong
             
             passes.push(new ZPrepassShader(_diffuseRenderTarget, _id + 9));
 			passes.push(new ZPrepassShader(_specularRenderTarget, _id + 6));
-            passes.push(new PhongEmissiveShader(_diffuseRenderTarget.textureResource, _specularRenderTarget.textureResource, null, meshBindings.getProperty(BasicProperties.BLENDING, Blending.OPAQUE) ? 0.1 : 0));
+            passes.push(new PhongEmissiveShader(_diffuseRenderTarget.textureResource, _specularRenderTarget.textureResource, null, 0));
             
             return passes;
 		}
