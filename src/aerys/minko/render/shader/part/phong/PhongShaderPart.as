@@ -208,7 +208,7 @@ package aerys.minko.render.shader.part.phong
 			
 			var computedShadows : SFloat = null;
 			
-			if (contribution && computeShadows)
+			if (computeShadows)
 			{
 				if (shadowCasting == ShadowMappingType.PCF)
 					computedShadows = matrixShadowMapAttenuation.getAttenuation(lightId);
