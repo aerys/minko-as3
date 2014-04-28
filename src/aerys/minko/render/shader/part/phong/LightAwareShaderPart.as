@@ -145,7 +145,25 @@ package aerys.minko.render.shader.part.phong
                         0,
                         meshBindings.getProperty(PhongProperties.NORMAL_MAP_FORMAT, SamplerFormat.RGBA)
 					);
-					var fsPixel		: SFloat = sampleTexture(fsNormalMap, fsUV);
+					
+					var uv:SFloat;
+					if (meshBindings.propertyExists(PhongProperties.NORMAL_MAP_UV_SCALE))
+					{
+						uv = vertexUV.xy;
+						uv.scaleBy(meshBindings.getParameter(PhongProperties.NORMAL_MAP_UV_SCALE, 2));
+
+						if (meshBindings.propertyExists(PhongProperties.NORMAL_MAP_UV_OFFSET))
+							uv.incrementBy(meshBindings.getParameter(PhongProperties.NORMAL_MAP_UV_OFFSET,2));
+						
+						uv = interpolate(uv);
+							
+					} 
+					else 
+					{
+						uv = fsUV;
+					}
+					
+					var fsPixel		: SFloat = sampleTexture(fsNormalMap, uv);
                     
                     fsPixel.scaleBy(2).decrementBy(1);
 					
