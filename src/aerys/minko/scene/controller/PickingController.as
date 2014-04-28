@@ -19,7 +19,7 @@ package aerys.minko.scene.controller
 	import aerys.minko.scene.node.ISceneNode;
 	import aerys.minko.scene.node.Mesh;
 	import aerys.minko.scene.node.Scene;
-	import aerys.minko.scene.node.camera.AbstractCamera;
+	import aerys.minko.scene.node.camera.*;
 	import aerys.minko.type.Signal;
 	import aerys.minko.type.binding.DataBindings;
 	import aerys.minko.type.binding.DataProvider;
@@ -32,7 +32,7 @@ package aerys.minko.scene.controller
 	{
 		private static var _pickingId				: uint			= 0;
 		
-		private static const PICKING_MAP			: BitmapData	= new BitmapData(1, 1, true, 0);
+		private static const PICKING_MAP			: BitmapData	= new BitmapData(1, 1, false, 0);
 		private static const SHADER					: Shader		= new PickingShader();
 		
 		private static const EFFECT_USE_COUNTER		: Dictionary	= new Dictionary(true);
@@ -370,19 +370,27 @@ package aerys.minko.scene.controller
                 if (_technique & PickingTechnique.PIXEL_PICKING)
                 {
     				// update picking projection to get the picked pixel in (0, 0)
-    				var projection : Matrix4x4 = _sceneData.pickingProjection;
+					var projection : Matrix4x4 = _sceneData.pickingProjection;
     				
     				projection.lock();
 					scene.activeCamera.getProjection(projection);
     				
-    				var rawData : Vector.<Number> = projection.getRawData();
+    				if(scene.activeCamera is OrthographicCamera) {
+
+    					var o:OrthographicCamera = scene.activeCamera as OrthographicCamera
+    					projection.prependTranslation(-_mouseX / o.zoom , _mouseY / o.zoom ,0)
+
+    				} else {
+	
+	    				var rawData : Vector.<Number> = projection.getRawData();
+    					rawData[8] = (-_mouseX / viewport.width) * 2.;
+    					rawData[9] = (_mouseY / viewport.height) * 2.;
+    					projection.setRawData(rawData);
+    
+    				}
     				
-    				rawData[8] = -_mouseX / viewport.width * 2.;
-    				rawData[9] = _mouseY / viewport.height * 2.;
-    				
-    				projection.setRawData(rawData);
     				projection.unlock();
-    				
+    				    				
     				SHADER.enabled = true;
     				_lastPickingTime = time;
                 }
@@ -401,7 +409,14 @@ package aerys.minko.scene.controller
 			if (_disableAntiAliasing)
 				context.configureBackBuffer(backBuffer.width, backBuffer.height, 0, true);
 			
-			context.clear(0, 0, 0, 0);
+			var color	: uint	= backBuffer.backgroundColor;
+			context.clear(
+				(color >>> 24) / 255.,
+				((color >> 16) & 0xff) / 255.,
+				((color >> 8) & 0xff) / 255.,
+				(color & 0xff) / 255.
+			);
+			
 		}
 		
 		private static function updatePickingMap(shader		: Shader,
@@ -421,7 +436,12 @@ package aerys.minko.scene.controller
 			if (_disableAntiAliasing)
 			{
 				context.configureBackBuffer(backBuffer.width, backBuffer.height, _previousAntiAliasing, true);
-				context.clear(0, 0, 0, 0);
+				context.clear(
+					(color >>> 24) / 255.,
+					((color >> 16) & 0xff) / 255.,
+					((color >> 8) & 0xff) / 255.,
+					(color & 0xff) / 255.
+				);
 			}
 			
 			SHADER.enabled = false;
