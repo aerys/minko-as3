@@ -1,10 +1,8 @@
-package aerys.minko.scene.controller.mesh.skinning
+﻿package aerys.minko.scene.controller.mesh.skinning
 {
 	import flash.geom.Matrix3D;
 	import flash.utils.ByteArray;
 	import flash.utils.Dictionary;
-	
-	import mx.utils.NameUtil;
 	
 	import aerys.minko.ns.minko_animation;
 	import aerys.minko.render.geometry.Geometry;
