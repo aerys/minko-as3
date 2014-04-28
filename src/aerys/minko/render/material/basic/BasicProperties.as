@@ -20,6 +20,7 @@ package aerys.minko.render.material.basic
 		public static const ALPHA_MAP_FORMAT  						: String	= 'alphaMapFormat';
 		public static const ALPHA_MAP_UV_SCALE						: String	= 'alphaMapUvScale';
 		public static const ALPHA_MAP_UV_OFFSET						: String	= 'alphaMapUvOffset';
+		public static const ALPHA_MAP_CHANNEL						: String	= 'alphaMapChannel';
 		
 		public static const BLENDING								: String	= 'blending';
 		public static const DEPTH_TEST								: String	= 'depthTest';

@@ -219,6 +219,16 @@ package aerys.minko.render.material.basic
         {
             setProperty(BasicProperties.UV_SCALE, value);
         }
+
+		public function get alphaMapChannel() : Matrix4x4
+		{
+			return getProperty(BasicProperties.ALPHA_MAP_CHANNEL);
+		}
+		public function set alphaMapChannel(value : Matrix4x4) : void
+		{
+			setProperty(BasicProperties.ALPHA_MAP_CHANNEL, value);
+		}
+
 		
 		public function BasicMaterial(properties : Object = null, effect : Effect = null, name : String = DEFAULT_NAME)
 		{
