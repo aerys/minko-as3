@@ -32,7 +32,7 @@ package aerys.minko.render.material.phong
 			var dynamicLighting	: SFloat = _phong.getDynamicLighting(-1, true, true, true);			
 			var shading 		: SFloat = add(staticLighting, dynamicLighting);
 
-			return multiply(shading, materialDiffuse);
+			return float4(multiply(shading.rgb, materialDiffuse.rgb), materialDiffuse.a);
 		}
 	}
 }
