@@ -140,7 +140,6 @@ package aerys.minko.render.material.phong
                 ++lightId)
 			{
                 var lightType : uint = getLightProperty(sceneBindings, lightId, 'type');
-                
                 if (lightType == AmbientLight.LIGHT_TYPE)
                 {
                     ambientEnabled = true;
@@ -194,7 +193,7 @@ package aerys.minko.render.material.phong
             return passes;
 		}
 		
-		private function pushPCFShadowMappingPass(sceneBindings	: DataBindingsProxy,
+		protected function pushPCFShadowMappingPass(sceneBindings	: DataBindingsProxy,
                                                   lightId 		: uint,
                                                   passes 		: Vector.<Shader>,
 												  fallback 		: Boolean = false) : void
@@ -204,7 +203,7 @@ package aerys.minko.render.material.phong
 			passes.push(new PCFShadowMapShader(lightId, lightId + 1 + (fallback ? _id : 0) + Number(lightId) / 1000, renderTarget));
 		}
 		
-		private function pushDualParaboloidShadowMappingPass(sceneBindings	: DataBindingsProxy,
+		protected function pushDualParaboloidShadowMappingPass(sceneBindings	: DataBindingsProxy,
 															 lightId 		: uint,
 															 passes 		: Vector.<Shader>,
 															 fallback 		: Boolean = false) : void
@@ -229,7 +228,7 @@ package aerys.minko.render.material.phong
 			);
 		}
 		
-		private function pushCubeShadowMappingPass(sceneBindings	: DataBindingsProxy,
+		protected function pushCubeShadowMappingPass(sceneBindings	: DataBindingsProxy,
 												   lightId 			: uint,
 												   passes 			: Vector.<Shader>,
 												   fallback 		: Boolean = false) : void
@@ -248,7 +247,7 @@ package aerys.minko.render.material.phong
 				));
 		}
 		
-		private function pushVarianceShadowMappingPass(sceneBindings	: DataBindingsProxy,
+		protected function pushVarianceShadowMappingPass(sceneBindings	: DataBindingsProxy,
 													   lightId 			: uint,
 													   passes 			: Vector.<Shader>,
 													   fallback 		: Boolean = false) : void
@@ -290,7 +289,7 @@ package aerys.minko.render.material.phong
 			}
 		}
 		
-		private function pushExponentialShadowMappingPass(sceneBindings	: DataBindingsProxy,
+		protected function pushExponentialShadowMappingPass(sceneBindings	: DataBindingsProxy,
 														  lightId 		: uint,
 														  passes 		: Vector.<Shader>,
 														  fallback 		: Boolean = false):void
@@ -332,7 +331,7 @@ package aerys.minko.render.material.phong
 			}
 		}
 		
-		private function hasShadowBlurPass(sceneBindings	: DataBindingsProxy,
+		protected function hasShadowBlurPass(sceneBindings	: DataBindingsProxy,
 							    		   lightId 			: uint) : Boolean
 		{
 			var quality	: uint	= getLightProperty(sceneBindings, lightId, 'shadowQuality');
@@ -340,7 +339,7 @@ package aerys.minko.render.material.phong
 			return quality > ShadowMappingQuality.HARD;
 		}
 		
-		private function lightPropertyExists(sceneBindings 	: DataBindingsProxy,
+		protected function lightPropertyExists(sceneBindings 	: DataBindingsProxy,
 											 lightId 		: uint,
 											 propertyName 	: String) : Boolean
 		{
@@ -349,7 +348,7 @@ package aerys.minko.render.material.phong
 			);
 		}
 		
-		private function getLightProperty(sceneBindings : DataBindingsProxy,
+		protected function getLightProperty(sceneBindings : DataBindingsProxy,
 										  lightId 		: uint,
 										  propertyName 	: String) : *
 		{
