@@ -48,7 +48,28 @@ package aerys.minko.render.shader.part.phong
 					0,
 					meshBindings.getProperty(BasicProperties.ALPHA_MAP_FORMAT, SamplerFormat.RGBA)
 				);
+				
+				if (meshBindings.propertyExists(BasicProperties.ALPHA_MAP_UV_SCALE))
+				{
+					uv = vertexUV.xy;
+					uv.scaleBy(meshBindings.getParameter(BasicProperties.ALPHA_MAP_UV_SCALE, 2));
+				}
+			
+				if (meshBindings.propertyExists(BasicProperties.ALPHA_MAP_UV_OFFSET))
+					uv.incrementBy(meshBindings.getParameter(BasicProperties.ALPHA_MAP_UV_OFFSET, 2));
+					
+				uv = interpolate(uv);
+
 				var alphaSample	: SFloat	= sampleTexture(alphaMap, uv);
+
+				// Optionally, select alpha channel
+				if (meshBindings.propertyExists(BasicProperties.ALPHA_MAP_CHANNEL))
+				{
+					alphaSample = multiply4x4(
+						alphaSample,
+						meshBindings.getParameter(BasicProperties.ALPHA_MAP_CHANNEL, 16)
+					);
+				}
 				
 				diffuseColor = float4(diffuseColor.rgb, alphaSample.r);					
 			}
