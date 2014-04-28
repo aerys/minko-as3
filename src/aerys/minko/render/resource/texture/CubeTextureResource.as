@@ -37,7 +37,7 @@ package aerys.minko.render.resource.texture
         private var _mipMapping     : Boolean;
 		private var _atf			: ByteArray;
 		private var _atfFormat		: uint;
-		private var _format 		: String;
+		private var _format 		: String = FORMAT_BGRA;
 		
         public function get format() : uint
         {
