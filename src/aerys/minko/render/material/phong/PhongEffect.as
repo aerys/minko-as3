@@ -77,7 +77,7 @@ package aerys.minko.render.material.phong
                     && getLightProperty(sceneBindings, lightId, 'enabled');
                 ++lightId)
             {
-                if (lightPropertyExists(sceneBindings, lightId, 'shadowMappingType'))
+                if (lightPropertyExists(sceneBindings, lightId, 'shadowMappingType') && meshBindings.getProperty("castShadows", false))
                 {
                     var lightType			: uint	= getLightProperty(sceneBindings, lightId, 'type');
                     var shadowMappingType 	: uint	= getLightProperty(
