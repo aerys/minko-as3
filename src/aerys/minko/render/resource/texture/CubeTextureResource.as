@@ -108,6 +108,7 @@ package aerys.minko.render.resource.texture
 		{
 			_bitmapDatas = new <BitmapData>[right, left, top, bottom, front, back];
             _mipMapping = mipmap;
+			_format = FORMAT_BGRA;
 		}
 		
 		public function setContentFromATF(atf : ByteArray) : void
