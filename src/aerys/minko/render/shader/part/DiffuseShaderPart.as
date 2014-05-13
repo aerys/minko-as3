@@ -27,17 +27,19 @@ package aerys.minko.render.shader.part
 			var diffuseColor : SFloat	= null;
 			var useVertexUv  : Boolean  = uv == null;
 
-            uv ||= vertexUV.xy;
+			if (meshBindings.propertyExists(VertexComponent.UV.toString()))
+			{
+            	uv ||= vertexUV.xy;
 			
-			if (meshBindings.propertyExists(BasicProperties.UV_SCALE))
-				uv.scaleBy(meshBindings.getParameter(BasicProperties.UV_SCALE, 2));
+				if (meshBindings.propertyExists(BasicProperties.UV_SCALE))
+					uv.scaleBy(meshBindings.getParameter(BasicProperties.UV_SCALE, 2));
 			
-			if (meshBindings.propertyExists(BasicProperties.UV_OFFSET))
-				uv.incrementBy(meshBindings.getParameter(BasicProperties.UV_OFFSET, 2));
+				if (meshBindings.propertyExists(BasicProperties.UV_OFFSET))
+					uv.incrementBy(meshBindings.getParameter(BasicProperties.UV_OFFSET, 2));
 
-			if (useVertexUv)
-				uv = interpolate(uv);
-			
+				if (useVertexUv)
+					uv = interpolate(uv);
+			}
 			if (meshBindings.propertyExists(BasicProperties.DIFFUSE_MAP) && 
 				(meshBindings.propertyExists(VertexComponent.UV.toString()) || meshBindings.propertyExists(VertexComponent.XY.toString()))) // mesh or sprite
 			{

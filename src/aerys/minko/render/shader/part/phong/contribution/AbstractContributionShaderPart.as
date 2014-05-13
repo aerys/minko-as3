@@ -7,6 +7,7 @@ package aerys.minko.render.shader.part.phong.contribution
 	import aerys.minko.render.shader.part.phong.LightAwareShaderPart;
 	import aerys.minko.type.enum.SamplerFiltering;
 	import aerys.minko.type.enum.SamplerFormat;
+	import aerys.minko.type.enum.SamplerMipMapping;
 
 	/**
 	 * Methods in this class allow to compute light contributions.
@@ -173,7 +174,7 @@ package aerys.minko.render.shader.part.phong.contribution
 					meshBindings.getTextureParameter(
 						PhongProperties.SPECULAR_MAP,
 						1,
-						0,
+						meshBindings.getProperty(PhongProperties.SPECULAR_MAP_MIPMAPPING, SamplerMipMapping.DISABLE),
 						1,
 						0,
 						meshBindings.getProperty(PhongProperties.SPECULAR_MAP_FORMAT, SamplerFormat.RGBA)

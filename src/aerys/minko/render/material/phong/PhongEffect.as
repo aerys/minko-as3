@@ -3,6 +3,7 @@ package aerys.minko.render.material.phong
 	import aerys.minko.render.DataBindingsProxy;
 	import aerys.minko.render.Effect;
 	import aerys.minko.render.RenderTarget;
+	import aerys.minko.render.material.basic.BasicProperties;
 	import aerys.minko.render.material.phong.multipass.PhongAdditionalShader;
 	import aerys.minko.render.material.phong.multipass.PhongAmbientShader;
 	import aerys.minko.render.material.phong.multipass.PhongEmissiveShader;
@@ -18,6 +19,7 @@ package aerys.minko.render.material.phong
 	import aerys.minko.scene.data.LightDataProvider;
 	import aerys.minko.scene.node.light.AmbientLight;
 	import aerys.minko.scene.node.light.PointLight;
+	import aerys.minko.type.enum.Blending;
 	import aerys.minko.type.enum.ShadowMappingQuality;
 	import aerys.minko.type.enum.ShadowMappingType;
 	
@@ -189,7 +191,7 @@ package aerys.minko.render.material.phong
             
             passes.push(new ZPrepassShader(_diffuseRenderTarget, _id + 9));
 			passes.push(new ZPrepassShader(_specularRenderTarget, _id + 6));
-            passes.push(new PhongEmissiveShader(_diffuseRenderTarget.textureResource, _specularRenderTarget.textureResource, null, _id));
+            passes.push(new PhongEmissiveShader(_diffuseRenderTarget.textureResource, _specularRenderTarget.textureResource, null, 0));
             
             return passes;
 		}

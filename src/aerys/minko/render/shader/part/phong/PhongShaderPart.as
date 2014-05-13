@@ -22,6 +22,7 @@ package aerys.minko.render.shader.part.phong
 	import aerys.minko.scene.node.light.SpotLight;
 	import aerys.minko.type.enum.NormalMappingType;
 	import aerys.minko.type.enum.SamplerFormat;
+	import aerys.minko.type.enum.SamplerMipMapping;
 	import aerys.minko.type.enum.ShadowMappingType;
 	
 	/**
@@ -118,27 +119,16 @@ package aerys.minko.render.shader.part.phong
 				var lightMap	: SFloat = meshBindings.getTextureParameter(
 					PhongProperties.LIGHT_MAP,
 					1,
-					0,
+					meshBindings.getProperty(PhongProperties.LIGHT_MAP_MIPMAPPING, SamplerMipMapping.DISABLE),
 					1,
 					0,
 					meshBindings.getProperty(PhongProperties.LIGHT_MAP_FORMAT, SamplerFormat.RGBA)
 				);
 				
 				return sampleTexture(lightMap, fsUV);
-				
-				/*if (meshBindings.propertyExists(PhongProperties.LIGHTMAP_MULTIPLIER))
-					contribution.scaleBy(meshBindings.getParameter(
-						PhongProperties.LIGHTMAP_MULTIPLIER,
-						1
-					));*/
-				//contribution = float3(0, 0, 0);
 			}
 			else
 				return float4(0, 0, 0, 0);
-			/*
-			return materialDiffuse 
-				? multiply(contribution, materialDiffuse)
-				: contribution;**/
 		}
 		
 		public function getAmbientLighting(materialDiffuse	: SFloat = null) : SFloat
@@ -216,26 +206,35 @@ package aerys.minko.render.shader.part.phong
 					contribution = diffuseLighting;
 			}
 			
+			var computedShadows : SFloat = null;
+			
+			if (computeShadows)
+			{
+				if (shadowCasting == ShadowMappingType.PCF)
+					computedShadows = matrixShadowMapAttenuation.getAttenuation(lightId);
+				else if (shadowCasting == ShadowMappingType.DUAL_PARABOLOID)
+					computedShadows = dpShadowMapAttenuation.getAttenuation(lightId);
+				else if (shadowCasting == ShadowMappingType.VARIANCE)
+					computedShadows = varianceShadowMapAttenuation.getAttenuation(lightId);
+				else if (shadowCasting == ShadowMappingType.EXPONENTIAL)
+					computedShadows = exponentialShadowMapAttenuation.getAttenuation(lightId);
+			}
+			
 			if (specular)
 			{
 				var specularLighting    : SFloat    = getDirectionalLightSpecular(lightId, normal);
 				
 				if (specularLighting)
+				{
+					if (computedShadows)
+						specularLighting.scaleBy(lessEqual(1, computedShadows));
 					contribution = contribution ? add(contribution, specularLighting) : specularLighting;
+				}
 			}
 			
 			// attenuation
-			if (contribution && computeShadows)
-			{
-				if (shadowCasting == ShadowMappingType.PCF)
-					contribution.scaleBy(matrixShadowMapAttenuation.getAttenuation(lightId));
-				else if (shadowCasting == ShadowMappingType.DUAL_PARABOLOID)
-					contribution.scaleBy(dpShadowMapAttenuation.getAttenuation(lightId));
-				else if (shadowCasting == ShadowMappingType.VARIANCE)
-					contribution.scaleBy(varianceShadowMapAttenuation.getAttenuation(lightId));
-				else if (shadowCasting == ShadowMappingType.EXPONENTIAL)
-					contribution.scaleBy(exponentialShadowMapAttenuation.getAttenuation(lightId));
-			}
+			if (contribution && computeShadows && computedShadows)
+				contribution.scaleBy(computedShadows);
 			
 			return contribution;
 		}

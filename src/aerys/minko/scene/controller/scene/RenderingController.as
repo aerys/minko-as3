@@ -292,11 +292,17 @@ package aerys.minko.scene.controller.scene
 				var settings		: ShaderSettings	= pass.settings;
 				var renderTarget 	: RenderTarget 		= settings.renderTarget || backBuffer;
 				
+				if (!previous)
+					_scene.beforeClear.execute(_scene, viewport, destination, getTimer());
+				
 				settings.setupRenderTarget(
 					context,
 					backBuffer,
 					previous ? previous.settings : null
 				);
+				
+				if (!previous)
+					_scene.afterClear.execute(_scene, viewport, destination, getTimer());
 				
 				if (!pass.settings.enabled || !pass.shader.enabled || !calls)
 				{
