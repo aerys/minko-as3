@@ -805,7 +805,7 @@ package aerys.minko.scene.controller.scene
 				var passInstance			: ShaderInstance	= passes[shaderInstanceId];
 				var passInstanceSignature	: Signature			= passInstance.signature;
 				var drawCalls				: Array				= _passInstanceToDrawCalls[passInstance];
-				var numDrawCalls			: uint				= drawCalls.length;
+				var numDrawCalls			: uint				= drawCalls ? drawCalls.length : 0;
 				
 				var needUpdateFromScene		: Boolean 			= sceneChanges != null
 					? passInstanceSignature.useProperties(_stashedPropertyChanges[sceneBindings], true) 
