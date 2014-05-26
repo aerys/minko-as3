@@ -10,6 +10,7 @@ package aerys.minko.render.material.basic
 	import aerys.minko.type.enum.BlendingDestination;
 	import aerys.minko.type.enum.BlendingSource;
 	import aerys.minko.type.enum.DepthTest;
+	import aerys.minko.type.enum.SpaceMode;
 	import aerys.minko.type.enum.StencilAction;
 	import aerys.minko.type.enum.TriangleCulling;
 	
@@ -189,9 +190,17 @@ package aerys.minko.render.material.basic
 		 */
 		override protected function getVertexPosition() : SFloat
 		{
-			return localToScreen(
-				_vertexAnimationPart.getAnimatedVertexPosition()
-			);
+			if (meshBindings.getProperty(BasicProperties.SPACE_MODE, SpaceMode.LOCAL) == SpaceMode.LOCAL)
+			{
+				return localToScreen(
+					_vertexAnimationPart.getAnimatedVertexPosition()
+				);
+			}
+			else
+			{
+				return worldToScreen(
+					_vertexAnimationPart.getAnimatedVertexPosition());
+			}
 		}
 		
 		/**

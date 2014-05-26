@@ -34,5 +34,7 @@ package aerys.minko.render.material.basic
 		public static const STENCIL_REFERENCE_VALUE					: String	= 'stencilReferenceValue';
 		public static const STENCIL_READ_MASK						: String	= 'stencilReadMask';
 		public static const STENCIL_WRITE_MASK						: String	= 'stencilWriteMask';
+		
+		public static const SPACE_MODE 								: String 	= 'spaceMode';
 	}
 }
