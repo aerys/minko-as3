@@ -42,11 +42,11 @@ package aerys.minko.render.shader
 		private var _enabled				: Boolean;
 		private var _defaultSettings		: ShaderSettings;
 		
-		private var _instances				: Vector.<ShaderInstance>;
+		private static var _instances		: Vector.<ShaderInstance>;
 		private var _numActiveInstances		: uint;
 		private var _numRenderedInstances	: uint;
 		private var _settings				: Vector.<ShaderSettings>;
-		private var _programs				: Vector.<Program3DResource>;
+		private static var _programs		: Vector.<Program3DResource>;
 		
 		private var _begin					: Signal;
 		private var _end					: Signal;
@@ -394,5 +394,11 @@ package aerys.minko.render.shader
 				_end.execute(this, context, backBuffer);
 			}
 		}
+		
+		public static function dispose():void
+		{
+            _instances.length=0;
+            _programs.length=0;
+        }
 	}
 }

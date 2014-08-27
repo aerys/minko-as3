@@ -15,6 +15,7 @@ package aerys.minko.render
 	
 	import aerys.minko.ns.minko_render;
 	import aerys.minko.render.resource.Context3DResource;
+	import aerys.minko.render.shader.Shader;
 	import aerys.minko.type.KeyboardManager;
 	import aerys.minko.type.MouseManager;
 	import aerys.minko.type.Signal;
@@ -313,6 +314,8 @@ package aerys.minko.render
 				_context3d.dispose(false);
 				_context3d = null;
 			}
+			
+			Shader.dispose();
 			
 			return ;
 		}
