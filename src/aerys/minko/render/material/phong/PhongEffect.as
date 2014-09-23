@@ -49,12 +49,12 @@ package aerys.minko.render.material.phong
      */
 	public class PhongEffect extends Effect
 	{
-		private static var _id : uint = 4242;
+		protected static var _id : uint = 4242;
 		
-		private var _diffuseRenderTarget	: RenderTarget;
-		private var _specularRenderTarget	: RenderTarget;
-        private var _singlePassShader   	: Shader;
-        private var _emissiveShader     	: Shader;
+		protected var _diffuseRenderTarget	: RenderTarget;
+		protected var _specularRenderTarget	: RenderTarget;
+        protected var _singlePassShader   	: Shader;
+        protected var _emissiveShader     	: Shader;
         
 		public function PhongEffect(singlePassShader	: Shader	= null,
                                     emissiveShader      : Shader    = null)
