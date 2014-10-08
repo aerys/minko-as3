@@ -54,7 +54,6 @@ package aerys.minko.render.material.phong
 		protected var _diffuseRenderTarget	: RenderTarget;
 		protected var _specularRenderTarget	: RenderTarget;
         protected var _singlePassShader   	: Shader;
-        protected var _emissiveShader     	: Shader;
         
 		public function PhongEffect(singlePassShader	: Shader	= null,
                                     emissiveShader      : Shader    = null)
@@ -63,8 +62,7 @@ package aerys.minko.render.material.phong
 			
 			++_id;
 			
-            _singlePassShader 	= singlePassShader || new PhongSinglePassShader(null, 0);
-            _emissiveShader 	= emissiveShader || new PhongEmissiveShader(null, null, null, .25);
+            _singlePassShader 	= singlePassShader || new PhongSinglePassShader(null, _id);
 		}
         
         override protected function initializePasses(sceneBindings	: DataBindingsProxy,
@@ -188,7 +186,7 @@ package aerys.minko.render.material.phong
             
             passes.push(new ZPrepassShader(_diffuseRenderTarget, _id + 9));
 			passes.push(new ZPrepassShader(_specularRenderTarget, _id + 6));
-            passes.push(new PhongEmissiveShader(_diffuseRenderTarget.textureResource, _specularRenderTarget.textureResource, null, _id));
+            passes.push(new PhongEmissiveShader(_diffuseRenderTarget.textureResource, _specularRenderTarget.textureResource, null, _singlePassShader.priority()));
             
             return passes;
 		}
