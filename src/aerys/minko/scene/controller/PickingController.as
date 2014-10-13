@@ -7,6 +7,7 @@ package aerys.minko.scene.controller
 	import flash.ui.MouseCursor;
 	import flash.utils.Dictionary;
 	import flash.utils.getQualifiedClassName;
+	import flash.utils.getTimer;
 	
 	import aerys.minko.render.Effect;
 	import aerys.minko.render.RenderTarget;
@@ -282,6 +283,9 @@ package aerys.minko.scene.controller
 			if (!_dispatchers[viewport])
 				bindDefaultInputs(viewport);
 			
+			if (!scene.renderingEnd.hasCallback(sceneRenderingEndHandler))
+				scene.renderingEnd.add(sceneRenderingEndHandler);
+			
 			_previousAntiAliasing = viewport.antiAliasing;
 			
 			// toggle picking pass
@@ -402,6 +406,11 @@ package aerys.minko.scene.controller
 			}
 		}
 		
+		private function sceneRenderingEndHandler(scene : Scene, viewport : Viewport, destination : BitmapData, time : int) : void
+		{
+			executeSignals();
+		}
+		
 		private static function cleanPickingMap(shader		: Shader,
 												context		: Context3DResource,
 												backBuffer	: RenderTarget) : void
@@ -453,7 +462,6 @@ package aerys.minko.scene.controller
 		{
 			updateMouseOverElement();
 			updateMouseCursor();
-			executeSignals();
 		}
 		
 		private function updateMouseOverElement() : void

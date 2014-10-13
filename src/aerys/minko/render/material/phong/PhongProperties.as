@@ -4,9 +4,6 @@ package aerys.minko.render.material.phong
 	{
 		public static const RECEPTION_MASK				: String = 'lightReceptionMask';
 		
-		public static const LIGHT_MAP					: String = 'lightMap';
-		public static const SPECULAR_MAP				: String = 'specularMap';
-		
 		public static const LIGHTMAP_MULTIPLIER			: String = 'lightMapMultiplier';
 		public static const AMBIENT_MULTIPLIER			: String = 'ambientMultiplier';
 		public static const DIFFUSE_MULTIPLIER			: String = 'diffuseMultiplier';
@@ -33,6 +30,12 @@ package aerys.minko.render.material.phong
 
 		public static const PARALLAX_MAPPING_NBSTEPS	: String = 'parallaxMappingNbSteps';
 		public static const PARALLAX_MAPPING_BUMP_SCALE	: String = 'parallaxMappingBumpScale';
+		
+		public static const SPECULAR_MAP				: String = 'specularMap';
+		public static const SPECULAR_MAP_MIPMAPPING 	: String = 'specularMapMipMapping';
+
+		public static const LIGHT_MAP					: String = 'lightMap';
+		public static const LIGHT_MAP_MIPMAPPING 		: String = 'specularMapMipMapping';
 		
 		public static const SHADOW_BIAS					: String = 'shadowBias';
 		public static const SHADOW_COLOR				: String = 'shadowColor';

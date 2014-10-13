@@ -53,13 +53,13 @@ package aerys.minko.render.material.phong.multipass
 					shading = shading ? add(shading, specular) : specular;
 				}
                 
-				shading = float4(shading.rgb, materialDiffuse.a);
+				//shading = float4(shading.rgb, materialDiffuse.a);
 //				diffuse = float4(add(diffuse.rgb, lighting.rgb), diffuse.a);
 //                diffuse = float4(multiply(diffuse.rgb, lighting.rgb), diffuse.a);
             }
             
 			
-			return shading;
+			return float4(shading.rgb, materialDiffuse.a);
         }
     }
 }

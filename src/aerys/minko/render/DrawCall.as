@@ -1,9 +1,11 @@
 package aerys.minko.render
 {
+	import flash.display3D.Context3DProgramType;
+	import flash.utils.Dictionary;
+	
 	import aerys.minko.ns.minko_render;
 	import aerys.minko.render.geometry.Geometry;
 	import aerys.minko.render.geometry.stream.IVertexStream;
-	import aerys.minko.render.geometry.stream.StreamUsage;
 	import aerys.minko.render.geometry.stream.VertexStream;
 	import aerys.minko.render.geometry.stream.format.VertexComponent;
 	import aerys.minko.render.geometry.stream.format.VertexFormat;
@@ -12,16 +14,11 @@ package aerys.minko.render
 	import aerys.minko.render.resource.Program3DResource;
 	import aerys.minko.render.resource.VertexBuffer3DResource;
 	import aerys.minko.render.resource.texture.ITextureResource;
-	import aerys.minko.render.shader.binding.IBinder;
 	import aerys.minko.type.binding.DataBindings;
 	import aerys.minko.type.enum.Blending;
-	import aerys.minko.type.enum.ColorMask;
 	import aerys.minko.type.enum.TriangleCulling;
 	import aerys.minko.type.math.Matrix4x4;
 	import aerys.minko.type.math.Vector4;
-	
-	import flash.display3D.Context3DProgramType;
-	import flash.utils.Dictionary;
 	
 	/**
 	 * DrawCall objects contain all the shader constants and buffer settings required
@@ -78,6 +75,14 @@ package aerys.minko.render
         
 		private var _bindingsConsumer	: DrawCallBindingsConsumer;
 		private var _customDepth		: Number = 0;
+		
+		private static var _lastNumTexture:uint =NUM_TEXTURES;
+		private static var _lastNumBuffer:uint = NUM_VERTEX_BUFFERS;
+		
+		private var _previousDrawCall 	: DrawCall 	= null;
+		private var _dirty 				: Boolean 	= true;
+		private var _fsSameAsPrevious 	: Boolean 	= false;
+		private var _vsSameAsPrevious 	: Boolean 	= false;
 		
 		public function get vertexComponents() : Vector.<VertexComponent>
 		{
@@ -292,8 +297,54 @@ package aerys.minko.render
 
 		public function apply(context : Context3DResource, previous : DrawCall) : uint
 		{
-			context.setProgramConstantsFromVector(PROGRAM_TYPE_VERTEX, 0, _vsConstants)
-				   .setProgramConstantsFromVector(PROGRAM_TYPE_FRAGMENT, 0, _fsConstants);
+//			if (previous == null)
+//			{
+				context.setProgramConstantsFromVector(PROGRAM_TYPE_VERTEX, 0, _vsConstants)
+					   .setProgramConstantsFromVector(PROGRAM_TYPE_FRAGMENT, 0, _fsConstants);
+//			}
+//			else
+//			{
+//				if (previous != _previousDrawCall)
+//					_dirty = true;
+//				
+//				if (_dirty)
+//				{
+//					var previousVsConstant : Vector.<Number> = previous._vsConstants;
+//					var previousFsconstant : Vector.<Number> = previous._fsConstants;
+//					
+//					var numVsConstant 	: uint = previousVsConstant.length;
+//					var numFsConstant 	: uint = previousFsconstant.length;
+//					var constantId		: uint = 0;
+//					
+//					_fsSameAsPrevious = numFsConstant == _fsConstants.length;
+//					_vsSameAsPrevious = numVsConstant == _vsConstants.length;
+//					
+//					while(_fsSameAsPrevious && constantId < numFsConstant)
+//					{
+//						if (previousFsconstant[constantId] != _fsConstants[constantId])
+//							_fsSameAsPrevious = false;
+//						constantId++;
+//					}
+//
+//					constantId = 0;
+//					
+//					while (_vsSameAsPrevious && constantId < numVsConstant)
+//					{
+//						if (previousVsConstant[constantId] != _vsConstants[constantId])
+//							_vsSameAsPrevious = false;
+//						constantId++;
+//					}
+//					
+//					_dirty = false;
+//				}
+//				
+//				if (!_fsSameAsPrevious)
+//					context.setProgramConstantsFromVector(PROGRAM_TYPE_FRAGMENT, 0, _fsConstants);
+//				if (!_vsSameAsPrevious)
+//					context.setProgramConstantsFromVector(PROGRAM_TYPE_VERTEX, 0, _vsConstants);
+//			}
+			
+			_previousDrawCall = previous;
 			
 			var numTextures	: uint	= _fsTextures.length;
 			var maxTextures	: uint	= previous ? previous._fsTextures.length : NUM_TEXTURES;
@@ -309,6 +360,9 @@ package aerys.minko.render
 				);
 			}
 			
+			var lastNumTexture : uint = _lastNumTexture;
+			_lastNumTexture = i;
+			
 			while (i < maxTextures)
 				context.setTextureAt(i++, null);
 
@@ -323,6 +377,9 @@ package aerys.minko.render
 				);
 			}
 			
+			var lastNumBuffer : uint = _lastNumBuffer;
+			_lastNumBuffer = i;
+			
 			while (i < maxBuffers)
 				context.setVertexBufferAt(i++, null);
 			
@@ -332,7 +389,7 @@ package aerys.minko.render
 				_firstIndex,
 				_numTriangles
 			);
-			
+		//	return 0;
 			return _numTriangles == -1 ? _indexBuffer.numIndices / 3 : _numTriangles;
 		}
 		

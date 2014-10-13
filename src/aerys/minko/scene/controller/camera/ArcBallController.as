@@ -304,6 +304,7 @@ package aerys.minko.scene.controller.camera
 					_speed * (_lookAt.z + _distance * Math.sin(_yaw) * Math.sin(_pitch))
 				);
 				TMP_MATRIX.lookAt(_lookAt, _position, _up);
+				//TMP_MATRIX.appendUniformScale(100);
 				
 				var numTargets : uint = this.numTargets;
 				for (var targetId : uint = 0; targetId < numTargets; ++targetId)

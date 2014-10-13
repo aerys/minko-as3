@@ -15,6 +15,7 @@ package aerys.minko.render.shader.part.phong
 	import aerys.minko.type.enum.SamplerFormat;
 	import aerys.minko.type.enum.SamplerMipMapping;
 	import aerys.minko.type.enum.SamplerWrapping;
+	import aerys.minko.type.enum.SpaceMode;
 	import aerys.minko.type.enum.TriangleCulling;
 	
 	public class LightAwareShaderPart extends ShaderPart
@@ -104,7 +105,10 @@ package aerys.minko.render.shader.part.phong
 		
 		public function get fsWorldNormal() : SFloat
 		{
-			return normalize(interpolate(deltaLocalToWorld(vsLocalNormal)));
+			if (meshBindings.getProperty(BasicProperties.SPACE_MODE, SpaceMode.LOCAL) == SpaceMode.LOCAL)
+				return normalize(interpolate(deltaLocalToWorld(vsLocalNormal)));
+			else
+				return fsLocalNormal;
 		}
 		
 		protected function get vsLocalTangent() : SFloat
