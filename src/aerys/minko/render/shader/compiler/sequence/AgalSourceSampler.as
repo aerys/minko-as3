@@ -6,6 +6,7 @@ package aerys.minko.render.shader.compiler.sequence
 	import aerys.minko.type.enum.SamplerFiltering;
 	import aerys.minko.type.enum.SamplerMipMapping;
 	import aerys.minko.type.enum.SamplerWrapping;
+	import aerys.minko.type.enum.SamplerFormat;
 	
 	import flash.utils.ByteArray;
 
@@ -48,6 +49,11 @@ package aerys.minko.render.shader.compiler.sequence
             return _mipmap;
         }
 		
+		public function get format() : uint
+        {
+            return _format;
+        }
+
 		public function AgalSourceSampler(index		: uint,
                                           format    : uint,
                                           dimension	: uint,
@@ -80,7 +86,8 @@ package aerys.minko.render.shader.compiler.sequence
 				+ SamplerFiltering.minko_shader::STRINGS[filter] + ','
 				+ SamplerMipMapping.minko_shader::STRINGS[mipmap] + ','
 				+ SamplerWrapping.minko_shader::STRINGS[wrapping] + ','
-				+ SamplerDimension.minko_shader::STRINGS[dimension]
+				+ SamplerDimension.minko_shader::STRINGS[dimension] + ','
+				+ SamplerFormat.minko_shader::STRINGS[format]
 				+ '>';
 		}
 	}

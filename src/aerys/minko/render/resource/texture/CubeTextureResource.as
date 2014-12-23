@@ -1,6 +1,7 @@
 package aerys.minko.render.resource.texture
 {
 	import aerys.minko.render.resource.Context3DResource;
+	import aerys.minko.type.Signal;
 	import aerys.minko.type.enum.SamplerFormat;
 
 	import flash.display.BitmapData;
@@ -31,13 +32,19 @@ package aerys.minko.render.resource.texture
 			TEXTURE_FORMAT_TO_SAMPLER[FORMAT_COMPRESSED_ALPHA] 	= SamplerFormat.COMPRESSED_ALPHA;
 		}
 
-		private var _bitmapDatas	: Vector.<BitmapData>;
-		private var _resource		: CubeTexture;
-		private var _size			: uint;
-        private var _mipMapping     : Boolean;
-		private var _atf			: ByteArray;
-		private var _atfFormat		: uint;
-		private var _format 		: String = FORMAT_BGRA;
+		private var _bitmapDatas				: Vector.<BitmapData>;
+		private var _texture					: CubeTexture;
+		private var _size						: uint;
+        private var _mipMapping					: Boolean;
+		private var _atf						: ByteArray;
+		private var _atfFormat					: uint;
+		private var _format 					: String = FORMAT_BGRA;
+
+		private var _update						: Boolean;
+		private var _disposed					: Boolean;
+		
+		private var _contextLost				: Signal		= new Signal("TextureResource.contextLost");
+		private var _contextLostHandlerAdded	: Boolean		= false;
 		
         public function get format() : uint
         {
@@ -76,6 +83,7 @@ package aerys.minko.render.resource.texture
 			_bitmapDatas = new <BitmapData>[];
             _mipMapping = mipmap;
 			_format = FORMAT_BGRA;
+			_update	= true;
 
 			var width	: Number = bitmapData.width / 4;
 			var height	: Number = bitmapData.height / 3;
@@ -106,51 +114,108 @@ package aerys.minko.render.resource.texture
 												  back		: BitmapData,
 												  mipmap	: Boolean) : void
 		{
+
 			_bitmapDatas = new <BitmapData>[right, left, top, bottom, front, back];
             _mipMapping = mipmap;
 			_format = FORMAT_BGRA;
+			_update	= true;
+
 		}
 		
 		public function setContentFromATF(atf : ByteArray) : void
 		{
 			_atf			= atf;
 			_bitmapDatas    = null;
+			_update			= true;
+
 
 			var oldSize 	: uint = _size;
 			var oldFormat	: String = _format;
 
-			atf.position 	= 6;
+			if (atf[6] == 0xFF)
+				atf.position 	= 12;
+			else
+				atf.position 	= 6;
 
-			var formatByte 	: uint  = atf.readUnsignedByte();
-			var atfFormat   : uint	= formatByte & 7;
-			_size 			        = 1 << atf.readUnsignedByte();
+			var formatByte 	: uint = atf.readUnsignedByte();
+			
+			_atfFormat 		= formatByte & 0x7F;
+			_size 			= 1 << atf.readUnsignedByte();
 
 			atf.position 	= 0;
 
-			switch (atfFormat) {
-				case 0: case 1: _format = FORMAT_BGRA; break;
-				case 2: case 3: _format = FORMAT_COMPRESSED; break;
-				case 4: case 5: _format = FORMAT_COMPRESSED_ALPHA; break
-				default: throw new Error("Invalid ATF format");
+			switch(_atfFormat)
+			{
+				case 0:
+				case 1: 
+					_format = FORMAT_BGRA;
+					break;
+				case 2:
+				case 3:
+					_format = FORMAT_COMPRESSED;
+					break;
+				case 4:
+				case 5:
+					_format = FORMAT_COMPRESSED_ALPHA;
+					break;
+				default:
+					throw new Error("Invalid ATF format");
 			}
 
-			if (_resource
+			if (_texture
 					&& (oldFormat != _format
 					|| oldSize != _size
 					))
 			{
-				_resource.dispose();
-				_resource = null;
+				_texture.dispose();
+				_texture = null;
 			}
+			
+		}
+
+		private function contextLostHandler(context : Context3DResource) : void
+		{
+			if (_disposed)
+				return;
+			_texture = null;
+			_contextLost.execute(this);
 		}
 		
 		public function getTexture(context : Context3DResource) : TextureBase
 		{
-			if (!_resource)
-				_resource = context.createCubeTexture(_size, _format, _bitmapDatas != null && _atf == null);
-			else
-				return _resource;
 
+			if (!_contextLostHandlerAdded)
+			{
+				context.contextChanged.add(contextLostHandler);
+				_contextLostHandlerAdded = true;
+			}
+
+			if (!_texture && _size)
+			{
+				if (_texture)
+					_texture.dispose();
+					
+				_texture = context.createCubeTexture(
+					_size,
+					_format,
+					_bitmapDatas != null && _atf == null
+				);
+				
+			}
+
+			if (_update)
+			{
+				_update = false;
+				uploadBitmapDataWithMipMaps();
+			}
+			
+			return _texture;
+			
+		}
+				
+		private function uploadBitmapDataWithMipMaps() : void
+		{
+			
 			if (_bitmapDatas != null)
 			{
 				for (var side : uint = 0; side < 6; ++side)
@@ -160,7 +225,7 @@ package aerys.minko.render.resource.texture
 					var bitmapData	: BitmapData	= _bitmapDatas[side];
                     
                     if (!_mipMapping)
-                        _resource.uploadFromBitmapData(bitmapData, side);
+                        _texture.uploadFromBitmapData(bitmapData, side);
                     else
                     {
                         while (mySize >= 1)
@@ -174,32 +239,40 @@ package aerys.minko.render.resource.texture
     						tmpMatrix.d		= mySize / bitmapData.height;
     						
     						tmpBitmapData.draw(bitmapData, tmpMatrix);
-    						_resource.uploadFromBitmapData(tmpBitmapData, side, mipmapId);
+    						_texture.uploadFromBitmapData(tmpBitmapData, side, mipmapId);
     						
     						++mipmapId;
     						mySize /= 2;
+    						tmpBitmapData.dispose()
     					}
                     }
+                    
+					bitmapData.dispose();
+					
 				}
 				
 				_bitmapDatas = null;
 			}
 			else if (_atf)
 			{
-				_resource.uploadCompressedTextureFromByteArray(_atf, 0);
+				_texture.uploadCompressedTextureFromByteArray(_atf, 0);
+				
+				_atf.clear();
 				_atf = null;
 			}
 			
-			if (!_resource)
-				throw new Error();
-			
-			return _resource;
 		}
 		
 		public function dispose() : void
 		{
-			if (_resource)
-				_resource.dispose();
+			_disposed = true;
+			if (_texture)
+			{
+				_texture.dispose();
+				_texture = null;
+			}
 		}
+		
 	}
+	
 }
