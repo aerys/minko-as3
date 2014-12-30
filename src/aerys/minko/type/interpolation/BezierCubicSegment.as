@@ -91,7 +91,7 @@ package aerys.minko.type.interpolation
 			_tmpPosT		= -1;
 			_tmpPointAtT	= -1;
 			_tmpTangentT	= -1;
-			_length			= NaN;
+			//_length			= NaN;
 		}
 			
 		override protected function updatePosition(t : Number) : void

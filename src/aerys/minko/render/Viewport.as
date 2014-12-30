@@ -57,6 +57,11 @@ package aerys.minko.render
 			return _context3d;
 		}
 		
+		public function get stage3d() : Stage3D
+		{
+			return _stage3d;
+		}
+
 		minko_render function get backBuffer() : RenderTarget
 		{
 			var positionOnStage	: Point	= localToGlobal(ZERO2);
@@ -225,7 +230,8 @@ package aerys.minko.render
 								 stage3dId			: uint		= 0,
 								 width				: uint 		= 0,
 								 height				: uint		= 0,
-								 context3DProfile	: String	= Context3DProfile.BASELINE)
+								 context3DProfile	: String	= Context3DProfile.BASELINE,
+								 stage3d			: Stage3D	= null)
 		{
 			_stage3dId = stage3dId;
 			_antiAliasing = antiAliasing;
@@ -233,6 +239,12 @@ package aerys.minko.render
 			
 			_width = width;
 			_height = height;
+			
+			if(stage3d)
+			{
+				_stage3d = stage3d;
+				context3dCreatedHandler(null);
+			}
 			
 			_context3DProfile = context3DProfile;
 			

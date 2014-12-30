@@ -14,7 +14,7 @@ package aerys.minko.render.material.phong
 	{
 		public static const DEFAULT_NAME	: String		= 'PhongMaterial';
 
-		private static const DEFAULT_EFFECT	: PhongEffect	= new PhongEffect();
+		public static const DEFAULT_EFFECT	: PhongEffect	= new PhongEffect();
 		
 		public function get receptionMask() : uint
 		{

@@ -74,6 +74,7 @@ package aerys.minko.render
 		private var _worldToScreen		: Matrix4x4							= null;
         
 		private var _bindingsConsumer	: DrawCallBindingsConsumer;
+		private var _customDepth		: Number = 0;
 		
 		private static var _lastNumTexture:uint =NUM_TEXTURES;
 		private static var _lastNumBuffer:uint = NUM_VERTEX_BUFFERS;
@@ -135,7 +136,8 @@ package aerys.minko.render
 						worldSpacePosition, TMP_VECTOR4
 					);
 					
-					_depth = screenSpacePosition.z / screenSpacePosition.w;
+					if (_customDepth) _depth = _customDepth
+					else _depth = screenSpacePosition.z / screenSpacePosition.w;
 				}
 			}
 			
@@ -170,6 +172,9 @@ package aerys.minko.render
 			if (meshBindings.hasCallback('localToWorld', transformChangedHandler))
 				meshBindings.removeCallback('localToWorld', transformChangedHandler);
             
+			if (meshBindings.hasCallback('depth', depthChangedHandler))
+				meshBindings.removeCallback('depth', depthChangedHandler);
+
             _bindingsConsumer = null;
 		}
 		
@@ -282,6 +287,10 @@ package aerys.minko.render
                     _localToWorld = meshBindings.getProperty('localToWorld');
 				meshBindings.addCallback('localToWorld', transformChangedHandler);
 				
+                if (meshBindings.propertyExists('depth'))
+                    _customDepth = meshBindings.getProperty('depth');
+				meshBindings.addCallback('depth', depthChangedHandler);
+
 				_invalidDepth = true;
 			}
 		}
@@ -401,5 +410,18 @@ package aerys.minko.render
 			
 			_invalidDepth = true;
 		}
+		
+		private function depthChangedHandler(bindings 	: DataBindings,
+												 property 	: String,
+												 oldValue	: Number,
+												 newValue	: Number) : void
+		{
+			_customDepth = newValue;		
+			_invalidDepth = true;
+		}
+
+		
+		
+		
 	}
 }
