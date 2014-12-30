@@ -153,11 +153,10 @@ package aerys.minko.scene.controller.mesh
 		private function refreshTempBitmapData() : void
 		{
 			if (!_tmpBitmapData)
-				_tmpBitmapData = new BitmapData(_source.width, _source.height);
+				_tmpBitmapData = new BitmapData(_source.width, _source.height,true,0);
 			else if (_forceBitmapDataClear)
 				_tmpBitmapData.fillRect(
-					new Rectangle(0, 0, _tmpBitmapData.width, _tmpBitmapData.height),
-					0
+					_tmpBitmapData.rect,0x00000000
 				);
 		}
 	}
